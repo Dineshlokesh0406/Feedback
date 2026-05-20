@@ -17,13 +17,15 @@ List<Map<String, String>> feedbackList = (List<Map<String, String>>) request.get
 <title>User Dashboard</title>
 <style>
 body { font-family: Arial, sans-serif; margin: 0; background: #f4f6f8; color: #222; }
-.top { background: #245a8d; color: white; padding: 15px 30px; }
-.top a { color: white; float: right; }
+.top { background: #245a8d; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
+.nav { display: flex; gap: 18px; align-items: center; }
+.nav a, .nav button { color: white; background: none; border: 0; padding: 0; font: inherit; text-decoration: underline; cursor: pointer; }
 .wrap { width: 90%; margin: 25px auto; }
 .panel { background: white; padding: 18px; border: 1px solid #ccc; margin-bottom: 20px; }
 input, textarea { padding: 9px; margin: 5px 0; box-sizing: border-box; }
 textarea { width: 100%; height: 70px; }
 button { padding: 9px 14px; background: #245a8d; color: white; border: 0; cursor: pointer; }
+.button-link { display: inline-block; padding: 9px 14px; background: #245a8d; color: white; text-decoration: none; }
 table { width: 100%; border-collapse: collapse; background: white; }
 th, td { border: 1px solid #ccc; padding: 10px; text-align: left; vertical-align: top; }
 th { background: #e7edf3; }
@@ -33,11 +35,25 @@ th { background: #e7edf3; }
 </head>
 <body>
 <div class="top">
-    Welcome, <%= session.getAttribute("name") %>
-    <a href="LogoutServlet">Logout</a>
+    <span>Welcome, <%= session.getAttribute("name") %></span>
+    <div class="nav">
+        <button type="button" onclick="openProfile()">Profile</button>
+        <a href="LogoutServlet">Logout</a>
+    </div>
 </div>
 <div class="wrap">
     <p class="msg">${message}</p>
+
+    <div class="panel" id="profilePanel" style="display:none;">
+        <h3>Edit Profile</h3>
+        <form action="ProfileServlet" method="post">
+            <input class="small-input" type="text" name="name" value="<%= session.getAttribute("name") %>" required>
+            <input class="small-input" type="email" name="email" value="<%= session.getAttribute("email") %>" required>
+            <input class="small-input" type="text" name="username" value="<%= session.getAttribute("username") %>" required>
+            <input class="small-input" type="password" name="password" placeholder="New password">
+            <button type="submit">Update Profile</button>
+        </form>
+    </div>
 
     <div class="panel">
         <h3>Add Feedback</h3>
@@ -55,18 +71,7 @@ th { background: #e7edf3; }
             <input type="hidden" name="action" value="search">
             <input type="text" name="keyword" placeholder="Search all feedback">
             <button type="submit">Search</button>
-            <a href="FeedbackServlet?action=view">View All</a>
-        </form>
-    </div>
-
-    <div class="panel">
-        <h3>Edit Profile</h3>
-        <form action="ProfileServlet" method="post">
-            <input class="small-input" type="text" name="name" value="<%= session.getAttribute("name") %>" required>
-            <input class="small-input" type="email" name="email" value="<%= session.getAttribute("email") %>" required>
-            <input class="small-input" type="text" name="username" value="<%= session.getAttribute("username") %>" required>
-            <input class="small-input" type="password" name="password" placeholder="New password" required>
-            <button type="submit">Update Profile</button>
+            <a class="button-link" href="FeedbackServlet?action=view">View All</a>
         </form>
     </div>
 
@@ -116,5 +121,10 @@ th { background: #e7edf3; }
         <% } %>
     </table>
 </div>
+<script>
+function openProfile() {
+    document.getElementById("profilePanel").style.display = "block";
+}
+</script>
 </body>
 </html>

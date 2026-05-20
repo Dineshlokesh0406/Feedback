@@ -25,16 +25,27 @@ public class ProfileServlet extends HttpServlet {
         String email = request.getParameter("email");
         String username = request.getParameter("username");
         String password = request.getParameter("password");
+        boolean updatePassword = password != null && !password.trim().isEmpty();
 
         try {
             Connection con = DBConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement(
-                    "UPDATE users SET name=?, email=?, username=?, password=? WHERE id=? AND role='user'");
-            ps.setString(1, name);
-            ps.setString(2, email);
-            ps.setString(3, username);
-            ps.setString(4, password);
-            ps.setInt(5, userId);
+            PreparedStatement ps;
+            if (updatePassword) {
+                ps = con.prepareStatement(
+                        "UPDATE users SET name=?, email=?, username=?, password=? WHERE id=?");
+                ps.setString(1, name);
+                ps.setString(2, email);
+                ps.setString(3, username);
+                ps.setString(4, password);
+                ps.setInt(5, userId);
+            } else {
+                ps = con.prepareStatement(
+                        "UPDATE users SET name=?, email=?, username=? WHERE id=?");
+                ps.setString(1, name);
+                ps.setString(2, email);
+                ps.setString(3, username);
+                ps.setInt(4, userId);
+            }
             ps.executeUpdate();
             con.close();
 
