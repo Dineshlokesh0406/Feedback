@@ -24,6 +24,7 @@ body { font-family: Arial, sans-serif; margin: 0; background: #f4f6f8; color: #2
 .panel { background: white; padding: 18px; border: 1px solid #ccc; margin-bottom: 20px; }
 input { padding: 9px; width: 260px; }
 button { padding: 9px 14px; background: #245a8d; color: white; border: 0; cursor: pointer; }
+.button-link { display: inline-block; padding: 9px 14px; background: #245a8d; color: white; text-decoration: none; }
 table { width: 100%; border-collapse: collapse; background: white; }
 th, td { border: 1px solid #ccc; padding: 10px; text-align: left; vertical-align: top; }
 th { background: #e7edf3; }
@@ -58,7 +59,7 @@ th { background: #e7edf3; }
             <input type="hidden" name="action" value="search">
             <input type="text" name="keyword" placeholder="Search all feedback">
             <button type="submit">Search</button>
-            <a href="FeedbackServlet?action=view">View All</a>
+            <a class="button-link" href="FeedbackServlet?action=view">View All</a>
         </form>
     </div>
 

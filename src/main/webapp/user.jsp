@@ -31,6 +31,7 @@ th, td { border: 1px solid #ccc; padding: 10px; text-align: left; vertical-align
 th { background: #e7edf3; }
 .msg { color: #1f6b2a; }
 .small-input { width: 180px; }
+.edit-form { display: none; margin-top: 12px; }
 </style>
 </head>
 <body>
@@ -96,13 +97,16 @@ th { background: #e7edf3; }
             <td><%= feedback.get("created_at") %></td>
             <td>
                 <% if (String.valueOf(session.getAttribute("userId")).equals(feedback.get("user_id"))) { %>
-                <form action="FeedbackServlet" method="post">
-                    <input type="hidden" name="action" value="update">
-                    <input type="hidden" name="feedbackId" value="<%= feedback.get("id") %>">
-                    <input type="text" name="subject" value="<%= feedback.get("subject") %>" required>
-                    <textarea name="message" required><%= feedback.get("message") %></textarea>
-                    <button type="submit">Update</button>
-                </form>
+                <button type="button" onclick="openEditForm('<%= feedback.get("id") %>')">Update</button>
+                <div class="edit-form" id="editForm<%= feedback.get("id") %>">
+                    <form action="FeedbackServlet" method="post">
+                        <input type="hidden" name="action" value="update">
+                        <input type="hidden" name="feedbackId" value="<%= feedback.get("id") %>">
+                        <input type="text" name="subject" value="<%= feedback.get("subject") %>" required>
+                        <textarea name="message" required><%= feedback.get("message") %></textarea>
+                        <button type="submit">Save</button>
+                    </form>
+                </div>
                 <% } else { %>
                 View only
                 <% } %>
@@ -125,6 +129,10 @@ th { background: #e7edf3; }
 <script>
 function openProfile() {
     document.getElementById("profilePanel").style.display = "block";
+}
+
+function openEditForm(feedbackId) {
+    document.getElementById("editForm" + feedbackId).style.display = "block";
 }
 </script>
 </body>
