@@ -24,7 +24,7 @@ a { color: #245a8d; }
         <button type="submit">Login</button>
     </form>
     <p>New user? <a href="register.jsp">Register here</a></p>
-    <p>Admin: admin@fms.com / admin123</p>
+    
 </div>
 </body>
 </html>
