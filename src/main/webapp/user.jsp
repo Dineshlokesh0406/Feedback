@@ -71,7 +71,8 @@ th { background: #e7edf3; }
             <input type="hidden" name="action" value="search">
             <input type="text" name="keyword" placeholder="Search all feedback">
             <button type="submit">Search</button>
-            <a class="button-link" href="FeedbackServlet?action=view">View All</a>
+            <a class="button-link" href="FeedbackServlet?action=viewAll">View All</a>
+            <a class="button-link" href="FeedbackServlet?action=view">Clear Search</a>
         </form>
     </div>
 

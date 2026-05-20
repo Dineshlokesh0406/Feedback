@@ -108,8 +108,10 @@ public class FeedbackServlet extends HttpServlet {
     }
 
     private void loadFeedback(HttpServletRequest request, String role, int userId) throws Exception {
+        String action = request.getParameter("action");
         String keyword = request.getParameter("keyword");
         boolean searching = keyword != null && !keyword.trim().isEmpty();
+        boolean viewAll = "viewAll".equals(action);
 
         String sql = "SELECT f.id, f.user_id, f.subject, f.message, f.created_at, u.name, u.email "
                 + "FROM feedback f INNER JOIN users u ON f.user_id = u.id ";
@@ -121,7 +123,7 @@ public class FeedbackServlet extends HttpServlet {
         } else {
             if (searching) {
                 sql += "WHERE f.subject LIKE ? OR f.message LIKE ? OR u.name LIKE ? OR u.email LIKE ? ";
-            } else {
+            } else if (!viewAll) {
                 sql += "WHERE f.user_id=? ";
             }
         }
@@ -132,7 +134,7 @@ public class FeedbackServlet extends HttpServlet {
         PreparedStatement ps = con.prepareStatement(sql);
 
         int index = 1;
-        if ("user".equals(role) && !searching) {
+        if ("user".equals(role) && !searching && !viewAll) {
             ps.setInt(index++, userId);
         }
         if (searching) {
