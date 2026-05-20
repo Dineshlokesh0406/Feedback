@@ -1,4 +1,4 @@
-package com.feedback;
+package fms;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -12,9 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 public class LoginServlet extends HttpServlet {
-
-    private static final long serialVersionUID = 1L;
-
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -23,29 +20,35 @@ public class LoginServlet extends HttpServlet {
 
         try {
             Connection con = DBConnection.getConnection();
-
             PreparedStatement ps = con.prepareStatement(
-                "SELECT * FROM users WHERE username=? AND password=?"
-            );
+                    "SELECT * FROM users WHERE username=? AND password=?");
             ps.setString(1, username);
             ps.setString(2, password);
-
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
                 HttpSession session = request.getSession();
                 session.setAttribute("userId", rs.getInt("id"));
+                session.setAttribute("name", rs.getString("name"));
+                session.setAttribute("email", rs.getString("email"));
                 session.setAttribute("username", rs.getString("username"));
+                session.setAttribute("role", rs.getString("role"));
 
-                response.sendRedirect("FeedbackServlet?action=list");
+                if ("admin".equals(rs.getString("role"))) {
+                    response.sendRedirect("FeedbackServlet?action=view");
+                } else {
+                    response.sendRedirect("FeedbackServlet?action=view");
+                }
             } else {
-                response.sendRedirect("login.jsp?error=Invalid username or password");
+                request.setAttribute("message", "Invalid username or password");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
             }
 
             con.close();
         } catch (Exception e) {
             e.printStackTrace();
-            response.sendRedirect("login.jsp?error=Something went wrong");
+            request.setAttribute("message", "Login failed");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
         }
     }
 }
